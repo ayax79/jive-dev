@@ -1,0 +1,6 @@
+web/target
+script-plugin/target
+*.iml
+*.ipr
+*.iws
+web/overlays
