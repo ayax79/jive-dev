@@ -1,41 +1,46 @@
 package com.syncapse.plugin.script
 
 import com.syncapse.jive.Loggable
-import javax.script.{SimpleScriptContext, ScriptEngineManager}
 import java.io.{Writer, StringWriter}
+import javax.script.{ScriptContext, SimpleScriptContext, ScriptEngineManager}
+import java.lang.String
 
 
 trait ScriptType {
-  abstract def name: String;
+  def name: String;
 }
 
 object ScriptType {
-  case class ECMAScriptType extends ScriptType {def name = "ECMAScript"}
+  val ECMA_SCRIPT = "ECMAScript"
+
+  case class ECMAScriptType extends ScriptType {def name = ECMA_SCRIPT}
 
   def getScriptType(name: String): ScriptType = name match {
-    case ECMAScriptType.name => ECMAScriptType
+    case ECMA_SCRIPT => ECMAScriptType()
   }
-
-
 }
 
-
+case class ScriptResult(content: String)
+case class ErrorResult(msg: String)
 
 object ScriptRunner extends Loggable {
   protected lazy val engineManager = new ScriptEngineManager();
 
-  def execute(scriptType: ScriptType, script: String): String = {
-    val engine = engineManager.getEngineByName(scriptType)
+  def execute(scriptType: ScriptType, script: String): Either[ErrorResult, ScriptResult] = {
+    val engine = engineManager.getEngineByName(scriptType.name)
     if (engine != null) {
       val writer = new StringWriter
-      val ctx = buildContext(ctx)
+      val ctx = buildContext(writer)
       engine.eval(script, ctx)
-      writer.toString
-    } else logger.warn("Could not determine engine, not executing script")
+      Right(ScriptResult(writer.toString))
+
+    } else {
+      logger.warn("Could not determine engine, not executing script")
+      Left(ErrorResult("Could not determine engine, not executing script"))
+    }
   }
 
-
-  protected def buildContext(writer: Writer) = {
+  protected def buildContext(writer: Writer): ScriptContext = {
     val context = new SimpleScriptContext
     context.setWriter(writer)
     context

@@ -7,8 +7,5 @@
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
        default-autowire="no" default-init-method="init" default-destroy-method="destroy">
               
-    <bean id="module1" class="SamplePlugin">
-    </bean>
-
 
 </beans>

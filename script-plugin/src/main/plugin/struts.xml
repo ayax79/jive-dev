@@ -1,9 +1,15 @@
-<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
     <package name="script-plugin-actions" extends="community-custom">
 
         <action name="script-console" class="com.syncapse.plugin.script.action.ScriptAction">
             <result name="success">/plugins/script-plugin/resources/templates/script-console.ftl</result>
+            <result name="json" type="stream">
+                <param name="contentType">application/json</param>
+                <param name="inputName">scriptResult</param>
+                <param name="bufferSize">1024</param>
+            </result>
         </action>
 
     </package>

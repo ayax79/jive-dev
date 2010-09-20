@@ -19,10 +19,22 @@
              else return true;
            },
            commandHandle:function(line){
-               return [{msg:"=> [12,42]",
-                        className:"jquery-console-message-value"},
-                       {msg:":: [a]",
-                        className:"jquery-console-message-type"}]
+//               return [{msg:"=> [12,42]",
+//                        className:"jquery-console-message-value"},
+//                       {msg:":: [a]",
+//                        className:"jquery-console-message-type"}]
+
+
+               try {
+                   $.post('<@s.url action="script-console" method="process" />',
+                   { script: line }, function(data) {
+                       report([
+                           {msg: " => " + data.msg, className:"jquery-console-message-value"}
+                       ]);
+                   }, "json");
+               } catch (e) {
+                   return e.toString();
+               }
            },
            autofocus:true,
            animateScroll:true,
@@ -50,7 +62,7 @@
            },
            animateScroll:true,
            promptHistory:true,
-           welcomeMessage:'Enter some JavaScript expressions to evaluate.'
+           welcomeMessage:'Enter some expressions to evaluate.'
          });
          controller2.promptText('5 * 4');
          /* Third console */
