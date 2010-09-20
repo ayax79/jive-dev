@@ -411,7 +411,7 @@
                                     <themes.directory>${basedir}/src/main/themes</themes.directory>
                                     <docverse.enabled>false</docverse.enabled>
                                     <rebel.struts2-plugin>true</rebel.struts2-plugin>
-                                    <!-- <pluginDirs>${basedir}/../myplugin/target/myplugin</pluginDirs> -->
+                                     <pluginDirs>${basedir}/../script-plugin/target/script-plugin-4.5.1-1.0</pluginDirs> 
                                 </systemProperties>
                                 <dependencies>
 				    <!-- Throw in our most common jdbc connectors; add yours here if it's missing -->
@@ -444,7 +444,7 @@
                             </configuration>
                         </configuration>
                     </plugin>
-                    <!-- <plugin>
+                    <plugin>
                         <groupId>org.zeroturnaround</groupId>
                         <artifactId>javarebel-maven-plugin</artifactId>
                         <executions>
@@ -461,10 +461,10 @@
                                 <fallback>default</fallback>
                                 <resources>
                                     <resource>
-                                        <directory>${basedir}/../myplugin/target/classes</directory>
+                                        <directory>${basedir}/../script-plugin/target/classes</directory>
                                     </resource>
                                     <resource>
-                                         <jarset>${basedir}/../myplugin/target/dependency</jarset>
+                                         <jarset>${basedir}/../script-plugin/target/dependency</jarset>
                                     </resource>
                                 </resources>
                             </classpath>
@@ -472,7 +472,7 @@
                                 <path>${basedir}/target/${customer.name}-${customer.version}-sbs-${sbs.version}</path>
                             </war>
                         </configuration>
-                    </plugin> -->
+                    </plugin>
               </plugins>
             </build>
         </profile>

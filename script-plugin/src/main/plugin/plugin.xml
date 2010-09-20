@@ -5,8 +5,6 @@
     <author></author>
     <version>1.0.0</version>
     <minServerVersion>4.5.0</minServerVersion>
-    <!-- you will want to change your class name here! -->
-    <class>SamplePlugin</class>
 
     <!-- The <components> element contains additions or customizations to
 	components in the user interface. Each <component> child element
