@@ -22,10 +22,10 @@
 
     <build>
         <finalName>script-plugin-plugin-${sbs.version}-${version}</finalName>
-	<sourceDirectory>src/main/scala</sourceDirectory>
+        <sourceDirectory>src/main/scala</sourceDirectory>
         <testSourceDirectory>src/test/scala</testSourceDirectory>
         <plugins>
-	   		<!-- For compilation-->
+            <!-- For compilation-->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -41,7 +41,9 @@
                     <execution>
                         <id>assembly</id>
                         <phase>package</phase>
-                        <goals><goal>single</goal></goals>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
@@ -64,8 +66,9 @@
                         </goals>
                         <configuration>
                             <tasks>
-                               <mkdir dir="${basedir}/target/script-plugin-${sbs.version}-${version}" />
-                               <unjar src="${basedir}/target/script-plugin-plugin-${sbs.version}-${version}.jar" dest="${basedir}/target/script-plugin-${sbs.version}-${version}" />
+                                <mkdir dir="${basedir}/target/script-plugin-${sbs.version}-${version}"/>
+                                <unjar src="${basedir}/target/script-plugin-plugin-${sbs.version}-${version}.jar"
+                                       dest="${basedir}/target/script-plugin-${sbs.version}-${version}"/>
                             </tasks>
                         </configuration>
                     </execution>
@@ -84,8 +87,8 @@
                     </execution>
                 </executions>
             </plugin>
-	    <!-- For unit testing -->
-	    <plugin>
+            <!-- For unit testing -->
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <configuration>
@@ -105,21 +108,26 @@
         </plugins>
     </build>
     <dependencies>
-    	<dependency>
-		<groupId>com.jivesoftware</groupId>
-	  	<artifactId>jive-sbs-employee</artifactId>    
-	  	<version>${sbs.version}</version>
-	  	<type>jar</type>
-	  	<scope>provided</scope>
-	</dependency>
+        <dependency>
+            <groupId>com.syncapse</groupId>
+            <artifactId>jive-scala</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jivesoftware</groupId>
+            <artifactId>jive-sbs-employee</artifactId>
+            <version>${sbs.version}</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
 
-	<dependency>
-	  	<groupId>com.jivesoftware</groupId>
-	  	<artifactId>jive-sbs-employee-all</artifactId> 
-	  	<version>${sbs.version}</version>
-	  	<type>pom</type>
-	  	<scope>provided</scope>
-	</dependency>
+        <dependency>
+            <groupId>com.jivesoftware</groupId>
+            <artifactId>jive-sbs-employee-all</artifactId>
+            <version>${sbs.version}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -128,8 +136,8 @@
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
-		<!-- The following dependencies are for unit testing-->
-	<dependency>
+        <!-- The following dependencies are for unit testing-->
+        <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
@@ -152,6 +160,6 @@
       -->
     <properties>
         <sbs.version>4.5.1</sbs.version>
-	<scala.version>2.8.0</scala.version>
+        <scala.version>2.8.0</scala.version>
     </properties>
 </project>
