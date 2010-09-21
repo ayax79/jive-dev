@@ -4,14 +4,16 @@ import com.opensymphony.xwork2.{Action, ActionSupport}
 import reflect.BeanProperty
 import com.syncapse.plugin.script.{ScriptResult, ErrorResult, ScriptType, ScriptRunner}
 import java.io.{ByteArrayInputStream, InputStream}
-import util.parsing.json.JSONObject
+import com.twitter.json.Json
+import com.jivesoftware.community.action.util.Decorate
 
+@Decorate(false)
 class ScriptAction extends ActionSupport {
   @BeanProperty
   var script: String = null
 
   @BeanProperty
-  var scriptType: String = ScriptType.ECMA_SCRIPT
+  var scriptType: String = ScriptType.ECMA_SCRIPT.name
 
   @BeanProperty
   var scriptResult: InputStream = null
@@ -28,8 +30,8 @@ class ScriptAction extends ActionSupport {
   }
 
   def asJSON(scriptResult: Either[ErrorResult, ScriptResult]) = scriptResult match {
-    case Left(ErrorResult(msg)) => new JSONObject(Map("msg" -> msg))
-    case Right(ScriptResult(msg)) => new JSONObject(Map("msg" -> msg))
+    case Left(ErrorResult(msg)) => Json.build(Map("msg" -> msg))
+    case Right(ScriptResult(msg)) => Json.build(Map("msg" -> msg))
   }
 
 }

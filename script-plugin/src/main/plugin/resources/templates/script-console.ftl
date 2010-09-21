@@ -2,10 +2,10 @@
           "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
-    <title>JQuery Console Demo</title>
+    <title>Script Console</title>
     <meta name="Content-Type" content="text/html; charset=UTF-8">
-    <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
-    <script type="text/javascript" src="jquery.console.js"></script>
+    <script type="text/javascript" src="<@s.url value='/plugins/script-plugin/resources/script/jquery-1.4.2.min.js' />"></script>
+    <script type="text/javascript" src="<@s.url value='/plugins/script-plugin/resources/script/jquery.console.js' />"></script>
     <!-- Everything beyond this point is user-customized -->
     <script type="text/javascript">
       $(document).ready(function(){
@@ -18,13 +18,7 @@
              if (line == "") return false;
              else return true;
            },
-           commandHandle:function(line){
-//               return [{msg:"=> [12,42]",
-//                        className:"jquery-console-message-value"},
-//                       {msg:":: [a]",
-//                        className:"jquery-console-message-type"}]
-
-
+           commandHandle:function(line, report){
                try {
                    $.post('<@s.url action="script-console" method="process" />',
                    { script: line }, function(data) {
@@ -44,75 +38,6 @@
               // Never allow zero.
               return !line.match(/[a-z]+/) && keycode != '0'.charCodeAt(0);
            }
-         });
-         /* Second console */
-         var console2 = $('<div class="console2">');
-         $('body').append(console2);
-         var controller2 = console2.console({
-           promptLabel: 'JavaScript> ',
-           commandValidate:function(line){
-             if (line == "") return false;
-             else return true;
-           },
-           commandHandle:function(line){
-               try { var ret = eval(line);
-                     if (typeof ret != 'undefined') return ret.toString();
-                     else return true; }
-               catch (e) { return e.toString(); }
-           },
-           animateScroll:true,
-           promptHistory:true,
-           welcomeMessage:'Enter some expressions to evaluate.'
-         });
-         controller2.promptText('5 * 4');
-         /* Third console */
-         var console3CancelFlag = false;
-         var console3 = $('<div class="console3">');
-         $('body').append(console3);
-         var controller3 = console3.console({
-           promptLabel: 'Echo> ',
-           commandValidate:function(line){
-             if (line == "") return false;
-             else return true;
-           },
-           commandHandle:function(line,report){
-               setTimeout(function() {
-		   if(!console3CancelFlag)
-		       report(line);
-		   else {
-		       report([{msg:"User interrupt",
-				className:"jquery-console-message-error"}]);
-		       console3CancelFlag = false;
-		   }
-	       },1000);
-           },
-           cancelHandle:function() {
-	       console3CancelFlag = true;
-	   },
-           animateScroll:true,
-           promptHistory:true
-         });
-         /* Fourth console */
-         var console4 = $('<div class="console4">');
-         $('body').append(console4);
-         var controller4 = console4.console({
-           promptLabel: 'SQL> ',
-           continuedPromptLabel: '  -> ',
-           commandValidate:function(line){
-             if (line == "") return false;
-             else return true;
-           },
-           commandHandle:function(line,report){
-              if (line.match(/;$/)) {
-                 controller4.continuedPrompt = false;
-                 alert("Execute: " + line);
-                 return true;
-              } else {
-                 controller4.continuedPrompt = true;
-                 return;
-              }
-           },
-           promptHistory:true
          });
        });
     </script>
@@ -136,55 +61,6 @@
        { color:#52666f; font-family:monospace;
          padding:0.1em; }
       div.console1 span.jquery-console-prompt-label { font-weight:bold }
-      /* Second console */
-      div.console2 { font-size: 14px; margin-top:1em }
-      div.console2 div.jquery-console-inner 
-       { width:900px; height:200px; background:#efefef; padding:0.5em;
-         overflow:auto }
-      div.console2 div.jquery-console-prompt-box
-       { color:#444; font-family:monospace; }
-      div.console2 div.jquery-console-focus span.jquery-console-cursor 
-       { background:#333; color:#eee; font-weight:bold }
-      div.console2 div.jquery-console-message-error
-       { color:#ef0505; font-family:sans-serif; font-weight:bold;
-         padding:0.1em; }
-      div.console2 div.jquery-console-message-success
-       { color:#187718; font-family:monospace;
-         padding:0.1em; }
-      div.console2 span.jquery-console-prompt-label { font-weight:bold }
-      /* Third console */
-      div.console3 { font-size: 14px; margin-top:1em }
-      div.console3 div.jquery-console-inner 
-       { width:900px; height:200px; background:#efefef; padding:0.5em;
-         overflow:auto }
-      div.console3 div.jquery-console-prompt-box
-       { color:#444; font-family:monospace; }
-      div.console3 div.jquery-console-focus span.jquery-console-cursor 
-       { background:#333; color:#eee; font-weight:bold }
-      div.console3 div.jquery-console-message-error
-       { color:#ef0505; font-family:sans-serif; font-weight:bold;
-         padding:0.1em; }
-      div.console3 div.jquery-console-message-success
-       { color:#187718; font-family:monospace;
-         padding:0.1em; }
-      div.console3 span.jquery-console-prompt-label {
-      font-weight:bold }
-      /* Fourth console */
-      div.console4 { font-size: 14px; margin-top:1em }
-      div.console4 div.jquery-console-inner 
-       { width:900px; height:200px; background:#efefef; padding:0.5em;
-         overflow:auto }
-      div.console4 div.jquery-console-prompt-box
-       { color:#444; font-family:monospace; }
-      div.console4 div.jquery-console-focus span.jquery-console-cursor 
-       { background:#444; color:#eee; font-weight:bold }
-      div.console4 div.jquery-console-message-error
-       { color:#ef0505; font-family:sans-serif; font-weight:bold;
-         padding:0.1em; }
-      div.console4 div.jquery-console-message-success
-       { color:#187718; font-family:monospace;
-         padding:0.1em; }
-      div.console4 span.jquery-console-prompt-label { font-weight:bold }
     </style>
   </head>
   <body>
@@ -193,13 +69,6 @@
         <strong>Please enable JavaScript or upgrade your browser.</strong>
       </p>
     </noscript>
-    <h1>Simple console demo</h1>
-    <p>Tested on:</p>
-    <ul>
-      <li>Internet Explorer 6</li>
-      <li>Opera 10.01</li>
-      <li>Chromium 4.0.237.0 (Ubuntu build 31094)</li>
-      <li>Firefox 3.5.8</li>
-    </ul>
+    <h1>Jive Script Console</h1>
   </body>
 </html>
