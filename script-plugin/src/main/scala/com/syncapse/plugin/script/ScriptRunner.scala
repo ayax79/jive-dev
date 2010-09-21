@@ -10,7 +10,7 @@ trait ScriptType {
 }
 
 object ScriptType {
-  case object ECMA_SCRIPT extends ScriptType { def name = "ECMAScript" }
+  case object ECMA_SCRIPT extends ScriptType {def name = "ECMAScript"}
 
   def getScriptType(name: String): ScriptType = name match {
     case "ECMAScript" => ECMA_SCRIPT.asInstanceOf[ScriptType]
@@ -23,13 +23,12 @@ case class ErrorResult(msg: String)
 object ScriptRunner extends Loggable {
   protected lazy val engineManager = new ScriptEngineManager();
 
-  def execute(scriptType: ScriptType, script: String): Either[ErrorResult, ScriptResult] = {
+  def execute(scriptType: ScriptType, script: String, bindings: Map[String, AnyRef]): Either[ErrorResult, ScriptResult] = {
     val engine = engineManager.getEngineByName(scriptType.name)
-    if (engine != null) {                                 
+    if (engine != null) {
       try {
-        val writer = new StringWriter
-        val ctx = buildContext(writer)
-        val result = engine.eval(script, ctx).toString
+        val b = buidBindings(bindings)
+        val result = engine.eval(script, b).toString
         Right(ScriptResult(result))
       }
       catch {
@@ -43,11 +42,11 @@ object ScriptRunner extends Loggable {
     }
   }
 
-  protected def buildContext(writer: Writer): ScriptContext = {
-    val context = new SimpleScriptContext
-    context.setWriter(writer)
-    context.setErrorWriter(writer)
-    context
+  protected def buidBindings(map: Map[String, AnyRef]): Bindings = {
+    val bindings = new SimpleBindings
+    map foreach { case (key, value) => bindings.put(key, value) }
+    bindings
   }
+
 
 }

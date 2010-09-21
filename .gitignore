@@ -4,3 +4,4 @@ script-plugin/target
 *.ipr
 *.iws
 web/overlays
+target
