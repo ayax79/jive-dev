@@ -6,6 +6,7 @@ import org.specs.runner.JUnit4
 import com.jivesoftware.base.UserManager
 import com.jivesoftware.base.aaa.AuthenticationProvider
 import com.jivesoftware.community._
+import org.springframework.web.context.WebApplicationContext
 
 class BindingUtilSpec extends JUnit4(BindingUtilSpec)
 object BindingUtilSpec extends Specification with Mockito {
@@ -18,14 +19,14 @@ object BindingUtilSpec extends Specification with Mockito {
       help must include("um")
     }
 
-    "build binginds map" in {
-      val ctx = mock[JiveContext]
-      ctx.getUserManager returns mock[UserManager]
-      ctx.getAuthenticationProvider returns mock[AuthenticationProvider]
-      ctx.getActivityManager returns mock[ActivityManager]
-      ctx.getAnnouncementManager returns mock[AnnouncementManager]
-      ctx.getCommunityManager returns mock[CommunityManager]
-      ctx.getForumManager returns mock[ForumManager]
+    "build bingings map" in {
+      val ctx = mock[WebApplicationContext]
+      ctx.getBean("userManagerImpl") returns mock[UserManager]
+      ctx.getBean("authenticationProvider") returns mock[AuthenticationProvider]
+      ctx.getBean("activityManagerImpl") returns mock[ActivityManager]
+      ctx.getBean("announcementManagerImpl") returns mock[AnnouncementManager]
+      ctx.getBean("communityManagerImpl") returns mock[CommunityManager]
+      ctx.getBean("forumManagerImpl") returns mock[ForumManager]
 
       val map = BindingUtil.buildBindingMap(ctx)
 
@@ -38,12 +39,12 @@ object BindingUtilSpec extends Specification with Mockito {
       map must haveKey("anm")
       map must haveKey("fm")
 
-      there was atLeastOne(ctx).getUserManager
-      there was atLeastOne(ctx).getAuthenticationProvider
-      there was atLeastOne(ctx).getActivityManager
-      there was atLeastOne(ctx).getAnnouncementManager
-      there was atLeastOne(ctx).getCommunityManager
-      there was atLeastOne(ctx).getForumManager
+      there was atLeastOne(ctx).getBean("userManagerImpl")
+      there was atLeastOne(ctx).getBean("authenticationProvider")
+      there was atLeastOne(ctx).getBean("activityManagerImpl")
+      there was atLeastOne(ctx).getBean("announcementManagerImpl")
+      there was atLeastOne(ctx).getBean("communityManagerImpl")
+      there was atLeastOne(ctx).getBean("forumManagerImpl")
     }
 
   }

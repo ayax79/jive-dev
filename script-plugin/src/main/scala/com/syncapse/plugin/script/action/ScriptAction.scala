@@ -15,7 +15,7 @@ class ScriptAction extends JiveActionSupport {
   var script: String = null
 
   @BeanProperty
-  var scriptType: String = ScriptType.ECMA_SCRIPT.name
+  var scriptType: String = ScriptType.JAVA_SCRIPT.name
 
   @BeanProperty
   var scriptResult: InputStream = null
@@ -36,7 +36,10 @@ class ScriptAction extends JiveActionSupport {
 
   protected def asJSON(scriptResult: Either[ErrorResult, ScriptResult]) = scriptResult match {
     case Left(ErrorResult(msg)) => Json.build(Map("msg" -> msg))
-    case Right(ScriptResult(msg)) => Json.build(Map("msg" -> msg))
+    case Right(ScriptResult(result, output, error)) => result match {
+      case Some(s) => Json.build(Map("result" -> s, "output" -> output, "error" -> error));
+      case None => Json.build(Map("output" -> output, "error" -> error))
+    }
   }
 
 }

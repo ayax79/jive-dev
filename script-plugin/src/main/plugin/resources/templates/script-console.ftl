@@ -8,14 +8,29 @@
             src="<@s.url value='/plugins/script-plugin/resources/script/jquery-1.4.2.min.js' />"></script>
 
     <script type="text/javascript">
+        var push_script = function() {
+            $.post('<@s.url action="script-console" method="process" />', { script: $('#input-box').val() },
+                    function(data) {
+                        var result = data.result;
+                        if (result) {
+                            $('#output-box').append('<li class="result-msg console-msg">result: ' + result + '</li>');
+                        }
+
+                        var output = data.output;
+                        if (output) {
+                            $('#output-box').append('<li class="output-msg console-msg">output: ' + output + '</li>');
+                        }
+
+                        var error = data.error;
+                        if (error) {
+                            $("#output-box").append('<li class="error-msg console-msg">error: ' + error + '</li>');
+                        }
+                    }, "json");
+        };
+
+
         $(function() {
 
-            var push_script = function() {
-                $.post('<@s.url action="script-console" method="process" />', { script: $('#input-box').val() },
-                        function(data) {
-                            $('#output-box').append("> " + data.msg + "<br />"); 
-                        }, "json");
-            };
 
             $('#submit-script').click(push_script);
         });
@@ -28,6 +43,15 @@
             height: 400px;
             margin-top: 10px;
             padding: 3px 3px 3px 3px;
+        }
+
+        .console-msg {
+            list-style-type: none;
+            font-weight: bold;
+        }
+
+        .error-msg {
+            color: red;
         }
     </style>
 
@@ -44,7 +68,7 @@
 
 <div id="help-box">
     <ul>
-        ${action.help}
+    ${action.help}
     </ul>
 </div>
 
