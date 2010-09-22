@@ -1,7 +1,6 @@
 package com.syncapse.plugin.script
 
 import com.syncapse.jive.Loggable
-import java.io.{Writer, StringWriter}
 import java.lang.String
 import javax.script._
 
@@ -43,10 +42,10 @@ object ScriptRunner extends Loggable {
   }
 
   protected def buidBindings(map: Map[String, AnyRef]): Bindings = {
-    val bindings = new SimpleBindings
+    val bindings: SimpleBindings = new SimpleBindings
+    // must add this way to ensure that the backing map is mutable
     map foreach { case (key, value) => bindings.put(key, value) }
     bindings
   }
-
 
 }

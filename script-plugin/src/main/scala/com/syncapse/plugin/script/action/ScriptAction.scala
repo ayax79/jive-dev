@@ -2,12 +2,11 @@ package com.syncapse.plugin.script.action
 
 import com.opensymphony.xwork2.Action
 import reflect.BeanProperty
-import com.syncapse.plugin.script.{ScriptResult, ErrorResult, ScriptType, ScriptRunner}
 import java.io.{ByteArrayInputStream, InputStream}
 import com.twitter.json.Json
 import com.jivesoftware.community.action.util.Decorate
-import org.springframework.web.context.support.{WebApplicationContextUtils, XmlWebApplicationContext}
 import com.jivesoftware.community.action.JiveActionSupport
+import com.syncapse.plugin.script._
 
 @Decorate(false)
 class ScriptAction extends JiveActionSupport {
@@ -26,20 +25,16 @@ class ScriptAction extends JiveActionSupport {
 
   def process: String = {
     val sType = ScriptType.getScriptType(scriptType)
-    val json = asJSON(ScriptRunner.execute(sType, script, buildBindingMap))
+    val json = asJSON(ScriptRunner.execute(sType, script, BindingUtil.buildBindingMap(getJiveContext)))
     scriptResult = new ByteArrayInputStream(json.toString.getBytes("UTF-8"))
     "json"
   }
+
+  def getHelp = BindingUtil.buildHelp
 
   protected def asJSON(scriptResult: Either[ErrorResult, ScriptResult]) = scriptResult match {
     case Left(ErrorResult(msg)) => Json.build(Map("msg" -> msg))
     case Right(ScriptResult(msg)) => Json.build(Map("msg" -> msg))
   }
-
-  protected def buildBindingMap: Map[String, AnyRef] = {
-    val ctx = WebApplicationContextUtils.getWebApplicationContext(getRequest.getSession.getServletContext).asInstanceOf[XmlWebApplicationContext]
-    ctx.getBeanDefinitionNames.map( k => (k, ctx.getBean(k))).toMap
-  }
-
 
 }
