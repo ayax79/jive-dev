@@ -7,6 +7,7 @@ import com.twitter.json.Json
 import com.jivesoftware.community.action.util.Decorate
 import com.jivesoftware.community.action.JiveActionSupport
 import com.syncapse.plugin.script._
+import org.springframework.web.context.support.WebApplicationContextUtils
 
 @Decorate(false)
 class ScriptAction extends JiveActionSupport {
@@ -25,7 +26,8 @@ class ScriptAction extends JiveActionSupport {
 
   def process: String = {
     val sType = ScriptType.getScriptType(scriptType)
-    val json = asJSON(ScriptRunner.execute(sType, script, BindingUtil.buildBindingMap(getJiveContext)))
+    val json = asJSON(ScriptRunner.execute(sType, script,
+      BindingUtil.buildBindingMap(WebApplicationContextUtils.getWebApplicationContext(getRequest.getSession.getServletContext))))
     scriptResult = new ByteArrayInputStream(json.toString.getBytes("UTF-8"))
     "json"
   }
